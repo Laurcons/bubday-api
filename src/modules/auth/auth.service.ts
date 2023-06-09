@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Invitee } from '@prisma/client';
 import { SignJWT, jwtVerify } from 'jose';
 import { Config } from 'src/lib/config';
@@ -14,6 +14,7 @@ export default class AuthService {
         urlCode: code,
       },
     });
+    if (!invitee) throw new HttpException('Invalid code', 422);
     const token = await new SignJWT({ id: invitee.id })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1h')

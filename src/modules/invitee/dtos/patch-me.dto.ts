@@ -9,4 +9,8 @@ export default class PatchMeDto {
   @IsString()
   @IsOptional()
   pizzaPreference: string;
+
+  @IsString()
+  @IsOptional()
+  favoriteSong: string;
 }

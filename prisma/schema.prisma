@@ -24,5 +24,7 @@ model Invitee {
   fullName String
 
   presenceStatus PresenceStatus?
-  pizzaPreference String
+  pizzaPreference String?
+  favoriteSong String?
+  
 }
