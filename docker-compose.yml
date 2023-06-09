@@ -56,7 +56,10 @@ services:
       - prod
     image: mysql
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - ./db:/var/lib/mysql:rw
 
