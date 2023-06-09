@@ -39,3 +39,34 @@ services:
       - 'mysql-local:db'
     depends_on:
       - mysql-local
+      
+  backend-prod:
+    profiles:
+      - prod
+    build:
+      dockerfile: Dockerfile.prod
+    ports:
+      - '${PORT}:3000'
+    depends_on:
+      - mysql-prod
+    environment: *common-variables
+
+  mysql-prod:
+    profiles:
+      - prod
+    image: mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    volumes:
+      - ./db:/var/lib/mysql:rw
+
+  phpmyadmin-prod:
+    profiles:
+      - prod
+    image: phpmyadmin
+    ports:
+      - '${PHPMYADMIN_PORT}:80'
+    links:
+      - 'mysql-prod:db'
+    depends_on:
+      - mysql-prod
