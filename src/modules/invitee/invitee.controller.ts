@@ -1,12 +1,13 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Patch } from '@nestjs/common';
 import { Invitee } from '@prisma/client';
 import { ReqUser } from 'src/modules/auth/req-user.decorator';
+import DeadlineService from 'src/modules/deadline/deadline.service';
 import PatchMeDto from 'src/modules/invitee/dtos/patch-me.dto';
 import InviteeService from 'src/modules/invitee/invitee.service';
 
 @Controller('/invitee')
 export default class InviteeController {
-  constructor(private inviteeService: InviteeService) {}
+  constructor(private inviteeService: InviteeService, private deadlineService: DeadlineService) {}
 
   @Get('/me')
   async getMe(@ReqUser() user: Invitee) {
@@ -22,6 +23,9 @@ export default class InviteeController {
 
   @Patch('/me')
   async patchMe(@ReqUser() user: Invitee, @Body() body: PatchMeDto) {
+    if (this.deadlineService.isPast()) {
+      throw new HttpException('Nu se pot modifica preferințele după deadline (te joci cu API-ul?)', 422);
+    }
     return await this.inviteeService.patchMe(user.id, body);
   }
 }
