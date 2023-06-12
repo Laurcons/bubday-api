@@ -16,12 +16,18 @@ enum PresenceStatus {
   negated
 }
 
+enum Gender {
+  male
+  female
+}
+
 model Invitee {
   id Int @id @default(autoincrement())
   urlCode String @unique
-  
+
   nickname String
   fullName String
+  gender Gender @default(male)
 
   presenceStatus PresenceStatus?
   pizzaPreference String?
